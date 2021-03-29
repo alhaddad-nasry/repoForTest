@@ -1,4 +1,0 @@
-var params = {
-    "apsdb.scriptHandle": "9D7619479CD5B6E88AE7232412E16A63"
-}
-return apsdb.callApi("GetQueuedScriptStatus", params, null);

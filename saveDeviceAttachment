@@ -1,8 +1,0 @@
-var device = require("device");
-var deviceId = "deviceTime-" + new Date().getTime();
-var params = {};
-params.id=deviceId;
-params.name=deviceId;
-params.password=deviceId;
-//params.attach=[request.files.attach[0]];
-return device.create(params);

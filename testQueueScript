@@ -1,4 +1,0 @@
-var params = {
-    "apsdb.scriptName": "testScript"
-}
-return apsdb.callApi("QueueScript", params, null);
