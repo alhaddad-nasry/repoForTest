@@ -1,0 +1,7 @@
+var document = require("document");
+var documentId = "documentTime-" + new Date().getTime();
+var params = {};
+params.key=documentId;
+params.id=documentId;
+params.attachments=[request.files.attach[0]];
+return document.create(params);
