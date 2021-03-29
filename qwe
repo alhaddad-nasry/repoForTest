@@ -1,0 +1,40 @@
+// import scriptr.io's connector to the flower power APIs
+var flowerPowerModule = require("parrot/flowerpower/client");
+var irrigationControl = require("custom/irrigationControl");
+var WATERING_VOLUME = 0.2;
+var AVERAGE_MOISTURE_RATIO = 33;
+var AVERAGE_TEMP = 25;
+// create an instance of the FlowerPower connector
+var flowerpower = new flowerPowerModule.FlowerPower({
+	username : "smart_farmer@smartfarm.com"
+});
+// Get the current soil mosture, light, temperature and fertilizer status of all
+// locations of our garden
+var locations = flowerpower.getGardenLocationsStatus().locations;
+// List all locations of the garden to obtain data such as coordinates and plant
+// name
+var locationsData = flowerpower.listLocations();
+// Loop through the list of locations. For each location, determine water
+// adjustments depending
+// on the current soil moisture ratio and the forecast max temperature at this
+// location
+for (var i = 0; i < locations.length; i++) {
+	var water = WATERING_VOLUME;
+	var waterDelta = getWaterAdjustmentFromSoilMoisture(locations[i]);
+	var water = water * (1 + waterDelta);
+	var currentLocationData = locationsData[locations[i].location_identifier];
+	waterDelta = getWaterAdjustmentFromWeatherForecast(currentLocationData);
+	water = water * (1 + waterDelta);
+	// Create irrigation instructions for the current plant
+	var irrigationInstruction = {
+		location : locations[i].location_identifier,
+		plant : currentLocationData.plant_nickname,
+		coordinates : currentLocationData.latitude + ","
+				+ currentLocationData.longitude,
+		water : water
+	};
+	// add the instructions to the plan
+	irrigationPlan.push(irrigationInstruction);
+}
+// apply watering plan
+irrigationControl.sendWateringPlan(irrigationPlan);
